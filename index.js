@@ -90,7 +90,6 @@ app.post("/signup", async (req, res, next) => {
 });
 
 app.post("/login", async (req, res, next) => {
-    console.log(process.env.TOKEN_SECRET);
     const { email, password } = req.body;
     const existingUser = users.find(user => user.email === email);
 
