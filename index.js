@@ -61,8 +61,18 @@ app.delete('/guitars/:id', ensureAuth, (req, res) => {
     }
 });
 
-app.post("/signup", async (req, res, next) => {
+app.post("/signup", (req, res, next) => {
     const { email, password } = req.body;
+
+    
+    if (!email || !password) {
+        return res.status(400).json({ success: false, message: "Email and password are required." });
+    }
+
+    if (users.some(user => user.email === email)) {
+        return res.status(400).json({ success: false, message: "Email already exists." });
+    }
+
     const newUser = {
         email,
         password,
@@ -77,8 +87,7 @@ app.post("/signup", async (req, res, next) => {
         );
     } catch (err) {
         console.log(err);
-        const error = new Error("Error! Something went wrong.");
-        return next(error);
+        return next(new Error("Error! Something went wrong."));
     }
     res.status(201).json({
         success: true,
